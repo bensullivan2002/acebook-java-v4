@@ -32,7 +32,8 @@ public class UsersController {
     private final PostRepository postRepository;
 
     @Autowired
-    public UsersController(UserRepository userRepository, AuthoritiesRepository authoritiesRepository, PostRepository postRepository) {
+    public UsersController(
+            UserRepository userRepository, AuthoritiesRepository authoritiesRepository, PostRepository postRepository) {
         this.userRepository = userRepository;
         this.authoritiesRepository = authoritiesRepository;
         this.postRepository = postRepository;
@@ -60,7 +61,8 @@ public class UsersController {
         User user = userRepository.findByUsername(currentPrincipleName);
         modelAndView.addObject("user", user);
 
-        List<Post> posts = postRepository.findByUserIdByOrderByIdDesc(userRepository.findIdByUsername(currentPrincipleName));
+        List<Post> posts = postRepository.findByUserIdByOrderByIdDesc(
+                userRepository.findIdByUsername(currentPrincipleName));
         modelAndView.addObject("posts", posts);
         modelAndView.addObject("post", new Post());
         modelAndView.addObject("comment", new Comment());
@@ -68,7 +70,8 @@ public class UsersController {
     }
 
     @PostMapping("/profile-pic-add")
-    public RedirectView profilePicAdd(@RequestParam(value = "imageProfileInfoInput", required=false) String imageProfileInfo) throws IOException {
+    public RedirectView profilePicAdd(@RequestParam(
+            value = "imageProfileInfoInput", required=false) String imageProfileInfo) throws IOException {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String currentPrincipleName = authentication.getName();
         User user = userRepository.findByUsername(currentPrincipleName);
