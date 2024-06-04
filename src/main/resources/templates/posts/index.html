@@ -38,14 +38,31 @@
 	</script>
 </head>
 <body>
-<header class="d-flex justify-content-end p-3 bg-light border-bottom">
-	<div sec:authorize="isAuthenticated()">
-		<a href="/logout" class="btn btn-outline-primary">Logout</a>
+<nav class="navbar navbar-expand-lg bg-body-tertiary">
+	<div class="container-fluid">
+		<a class="navbar-brand" href="/">Acebook</a>
+		<button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+			<span class="navbar-toggler-icon"></span>
+		</button>
+		<div class="collapse navbar-collapse" id="navbarSupportedContent">
+			<ul class="navbar-nav me-auto mb-2 mb-lg-0">
+				<li class="nav-item">
+					<a class="nav-link active" aria-current="page" href="/">Home</a>
+				</li>
+				<li class="nav-item">
+					<a class="nav-link" href="/users/profile">Users</a>
+				</li>
+			</ul>
+			<div sec:authorize="isAuthenticated()">
+				<a href="/logout" class="nav-link me-3">Logout</a>
+			</div>
+			<form class="d-flex me-3" role="search">
+				<input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
+				<button class="btn btn-outline-success" type="submit">Search</button>
+			</form>
+		</div>
 	</div>
-	<div sec:authorize="isAnonymous()">
-		<a href="/login" class="btn btn-outline-primary">Login</a>
-	</div>
-</header>
+</nav>
 <div class="container mt-4">
 	<h1 class="mb-4">Posts</h1>
 
@@ -63,17 +80,12 @@
 	<p class="hidden" id="image-preview">
 		<img th:src="thumbnail_image" id="thumbnail-image"/>
 	</p>
-	<button type="button" id="upload_widget" th:onclick="'showImageField()'">Upload Media</button>
-	<p><input id="content_create" type="submit" value="Submit" /></p>
-</form>
+	<button type="button" id="upload_widget" class="btn btn-secondary mb-3" th:onclick="'showImageField()'">Upload Media</button>
+	<p><input id="content_create" class="btn btn-primary" type="submit" value="Submit" /></p>
+	</form>
 		<div class="hidden mb-3" id="image-preview">
 			<img th:src="thumbnail_image" id="thumbnail-image" class="img-fluid"/>
 		</div>
-		<button type="button" id="upload_widget" class="btn btn-secondary mb-3" th:onclick="'showImageField()'">Upload Media</button>
-		<div>
-			<input id="content_create" type="submit" class="btn btn-primary" value="Submit" />
-		</div>
-	</form>
 
 	<script src="https://upload-widget.cloudinary.com/latest/global/all.js" type="text/javascript"></script>
 
@@ -96,39 +108,37 @@
 
 	<div th:each="post : ${posts}" class="card mb-4">
 		<div class="card-body">
-			<p class="card-title fw-bold" th:text="${post.user.firstname}"></p>
-			<p><img th:src="${post.user.profilePicture}" id="profilePicture" class="img-thumbnail"></p>
-			<p class="card-text" th:text="${post.content}"></p>
-			<!-- Conditionally display the image only if img_url is present -->
+			<p class="card-title" th:text="${post.content}"></p>
 			<div th:if="${post.img_url != null && !post.img_url.isEmpty()}">
 				<img th:src="${post.img_url}" id="postImage" class="img-fluid"/>
 			</div>
-			<p th:text="'Likes: ' + ${post.likeCount}" class="mt-2"></p>
+			<div class="card-commented">
+				<p class="card-text fw-bold" th:text="${post.user.firstname}"></p>
+				<p><img th:src="${post.user.profilePicture}" id="profilePicture" class="img-thumbnail"></p>
+			</div>
+			<!-- Conditionally display the image only if img_url is present -->
 			<!-- Display comments associated with the post -->
 			<div class="mt-3">
 				<div th:each="comment : ${post.comments}" class="border-bottom py-2">
 					<p class="mb-0" th:text="${comment.content}"></p>
 				</div>
 			</div>
+			<div class="card-buttons">
+				<form th:action="@{/posts-comments}" method="post" class="mt-3">
+					<input type="hidden" name="postId" th:value="${post.id}"/>
+					<div class="mb-3 hidden" th:id="'comment-content' + ${post.id}">
+						<label th:for="'comment-input' + ${post.id}" class="form-label">Content:</label>
+						<input th:id="'comment-input' + ${post.id}" type="text" class="form-control" placeholder="Write a comment..." name="content"/>
+					</div>
+					<button type="button" th:id="'comment_button' + ${post.id}" class="btn btn-outline-secondary" th:onclick="'showContentField(' + ${post.id} + ')'">Comment</button>
+					<button type="submit" th:id="'submit_button' + ${post.id}" class="btn btn-primary hidden">Comment</button>
+				</form>
+				<form th:action="@{/posts-like}" method="post" class="d-inline">
+					<input type="hidden" name="postId" th:value="${post.id}"/>
+					<button id="myBtn" type="submit" th:id="'like_button' + ${post.id}" class="btn btn-outline-primary" th:text="'Likes: ' + ${post.likeCount}"></button>
+				</form>
 
-			<form th:action="@{/posts-comments}" method="post" class="mt-3">
-				<input type="hidden" name="postId" th:value="${post.id}"/>
-				<div class="mb-3 hidden" th:id="'comment-content' + ${post.id}">
-					<label th:for="'comment-input' + ${post.id}" class="form-label">Content:</label>
-					<input th:id="'comment-input' + ${post.id}" type="text" class="form-control" placeholder="Write a comment..." name="content"/>
-				</div>
-				<button type="button" th:id="'comment_button' + ${post.id}" class="btn btn-outline-secondary" th:onclick="'showContentField(' + ${post.id} + ')'">Comment</button>
-				<button type="submit" th:id="'submit_button' + ${post.id}" class="btn btn-primary hidden">Comment</button>
-			</form>
-			<form th:action="@{/posts-like}" method="post" class="d-inline">
-				<input type="hidden" name="postId" th:value="${post.id}"/>
-				<button id="myBtn" type="submit" th:id="'like_button' + ${post.id}" class="btn btn-outline-primary" th:text="'Likes: ' + ${post.likeCount}"></button>
-				<script>
-					document.getElementById("myBtn").addEventListener("click", function(){
-                        event.preventDefault();
-                    });
-				</script>
-			</form>
+			</div>
 
 		</div>
 	</div>
