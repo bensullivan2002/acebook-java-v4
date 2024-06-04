@@ -13,10 +13,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.view.RedirectView;
 
@@ -36,7 +33,8 @@ public class UsersController {
     private final PostRepository postRepository;
 
     @Autowired
-    public UsersController(UserRepository userRepository, AuthoritiesRepository authoritiesRepository, PostRepository postRepository) {
+    public UsersController(
+            UserRepository userRepository, AuthoritiesRepository authoritiesRepository, PostRepository postRepository) {
         this.userRepository = userRepository;
         this.authoritiesRepository = authoritiesRepository;
         this.postRepository = postRepository;
@@ -79,7 +77,8 @@ public class UsersController {
         User user = userRepository.findByUsername(currentPrincipleName);
         modelAndView.addObject("user", user);
 
-        List<Post> posts = postRepository.findByUserIdByOrderByIdDesc(userRepository.findIdByUsername(currentPrincipleName));
+        List<Post> posts = postRepository.findByUserIdByOrderByIdDesc(
+                userRepository.findIdByUsername(currentPrincipleName));
         modelAndView.addObject("posts", posts);
         modelAndView.addObject("post", new Post());
         modelAndView.addObject("comment", new Comment());
@@ -87,7 +86,8 @@ public class UsersController {
     }
 
     @PostMapping("/profile-pic-add")
-    public RedirectView profilePicAdd(@RequestParam(value = "imageProfileInfoInput", required=false) String imageProfileInfo) throws IOException {
+    public RedirectView profilePicAdd(@RequestParam(
+            value = "imageProfileInfoInput", required=false) String imageProfileInfo) throws IOException {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String currentPrincipleName = authentication.getName();
         User user = userRepository.findByUsername(currentPrincipleName);
@@ -97,5 +97,12 @@ public class UsersController {
         user.setProfilePicture(thumbnail_url);
         userRepository.save(user);
         return new RedirectView("/users/profile");
+    }
+
+    @GetMapping("/users")
+    public ModelAndView  users() {
+        ModelAndView modelAndView = new ModelAndView("users/users");
+        modelAndView.addObject("users", userRepository.findAll());
+        return modelAndView;
     }
 }
