@@ -82,18 +82,6 @@ public class PostsController {
         return ResponseEntity.ok(response);
     }
 
-//    @PostMapping("/posts-like")
-//    public RedirectView like(@RequestParam("postId") Long postId, @RequestParam(required = false) String fromProfilePage) {
-//        Optional<Post> postOptional = postRepository.findById(postId);
-//        Post post = postOptional.get();
-//        post.incrementLikeCount();
-//        postRepository.save(post);
-//        if ("true".equals(fromProfilePage)) {
-//            return new RedirectView("/users/profile");
-//        }
-//        return new RedirectView("/posts");
-//    }
-
     @PostMapping("/posts-comments")
     public RedirectView comment(@RequestParam("postId") Long postId, @RequestParam("content") String content, @RequestParam(required = false) String fromProfilePage) {
         Optional<Post> postOptional = postRepository.findById(postId);
