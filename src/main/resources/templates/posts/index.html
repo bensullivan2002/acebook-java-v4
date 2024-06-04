@@ -60,6 +60,12 @@
 		</div>
 		<input type="hidden" id="imageInfoInput" name="imageInfoInput" th:value="*{img_url}"/>
 		<input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+	<p class="hidden" id="image-preview">
+		<img th:src="thumbnail_image" id="thumbnail-image"/>
+	</p>
+	<button type="button" id="upload_widget" th:onclick="'showImageField()'">Upload Media</button>
+	<p><input id="content_create" type="submit" value="Submit" /></p>
+</form>
 		<div class="hidden mb-3" id="image-preview">
 			<img th:src="thumbnail_image" id="thumbnail-image" class="img-fluid"/>
 		</div>
