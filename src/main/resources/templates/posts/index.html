@@ -35,6 +35,28 @@
 		  uploadWidget.classList.remove('hidden');
 		  imagePreview.classList.remove('hidden');
     	}
+		function likePost(postId) {
+            var likeCountElement = document.getElementById('like_count' + postId);
+            var csrfToken = document.querySelector('input[name="_csrf"]').value;
+
+            fetch('/posts-like', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                    'X-CSRF-TOKEN': csrfToken
+                },
+                body: new URLSearchParams({
+                    postId: postId
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    likeCountElement.textContent = 'Likes: ' + data.newLikeCount;
+                }
+            })
+            .catch(error => console.error('Error:', error));
+        }
 
     </script>
 </head>
@@ -95,9 +117,10 @@
 		<div th:if="${post.img_url != null && !post.img_url.isEmpty()}">
 			<img th:src="${post.img_url}" id="postImage">
 		</div>
-		<p th:text="'Likes: ' + ${post.likeCount}"></p>
-		<form th:action="@{/posts-like}" method="post" class="like_button">
+		<p id="like_count" th:id="'like_count' + ${post.id}" th:text="'Likes: ' + ${post.likeCount}"></p>
+		<form class="like_button" th:onsubmit="event.preventDefault(); likePost([[${post.id}]]);">
 			<input type="hidden" name="postId" th:value="${post.id}"/>
+			<input type="hidden" name="_csrf" th:value="${_csrf.token}" />
 			<button type="submit" th:id="'like_button' + ${post.id}">Like</button>
 		</form>
 		<!-- Display comments associated with the post -->
