@@ -79,4 +79,11 @@ public class UsersController {
         userRepository.save(user);
         return new RedirectView("/users/profile");
     }
+
+    @GetMapping("/users")
+    public ModelAndView  users() {
+        ModelAndView modelAndView = new ModelAndView("users/users");
+        modelAndView.addObject("users", userRepository.findAll());
+        return modelAndView;
+    }
 }

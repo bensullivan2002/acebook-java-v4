@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:sec="http://www.w3.org/1999/xhtml">
+	<head>
+		<meta charset="UTF-8">
+		<title>All Users</title>
+	</head>
+	<body>
+		<header>
+			<div sec:authorize="isAuthenticated()">
+				<a href="/logout">Logout</a>
+			</div>
+			<div sec:authorize="isAnonymous()">
+				<a href="/login">Login</a>
+			</div>
+		</header>
+		<h1>Users</h1>
+		<div th:each="user : ${users}">
+			<h2 th:text="${user.firstname} + ' ' + ${user.lastname}"></h2>
+		</div>
+	</body>
+</html>
