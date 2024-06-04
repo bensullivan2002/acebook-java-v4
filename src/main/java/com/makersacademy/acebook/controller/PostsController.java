@@ -72,21 +72,14 @@ public class PostsController {
     @ResponseBody
     public ResponseEntity<Map<String, Object>> like(@RequestParam("postId") Long postId) {
         Optional<Post> postOptional = postRepository.findById(postId);
-        if (postOptional.isPresent()) {
-            Post post = postOptional.get();
-            post.incrementLikeCount();
-            postRepository.save(post);
+        Post post = postOptional.get();
+        post.incrementLikeCount();
+        postRepository.save(post);
+        Map<String, Object> response = new HashMap<>();
+        response.put("success", true);
+        response.put("newLikeCount", post.getLikeCount());
 
-            Map<String, Object> response = new HashMap<>();
-            response.put("success", true);
-            response.put("newLikeCount", post.getLikeCount());
-
-            return ResponseEntity.ok(response);
-        } else {
-            Map<String, Object> response = new HashMap<>();
-            response.put("success", false);
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
-        }
+        return ResponseEntity.ok(response);
     }
 
 //    @PostMapping("/posts-like")
