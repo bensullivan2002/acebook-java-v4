@@ -109,6 +109,10 @@
 	<div th:each="post : ${posts}" class="card mb-4">
 		<div class="card-body">
 			<p class="card-title" th:text="${post.content}"></p>
+			<div class="post-header">
+				<img th:src="${post.user.profilePicture}" class="profile-picture">
+				<span class="post-user-name" th:text="${post.user.firstname}"></span>
+			</div>
 			<div th:if="${post.img_url != null && !post.img_url.isEmpty()}">
 				<img th:src="${post.img_url}" id="postImage" class="img-fluid"/>
 			</div>
@@ -137,9 +141,7 @@
 					<input type="hidden" name="postId" th:value="${post.id}"/>
 					<button id="myBtn" type="submit" th:id="'like_button' + ${post.id}" class="btn btn-outline-primary" th:text="'Likes: ' + ${post.likeCount}"></button>
 				</form>
-
 			</div>
-
 		</div>
 	</div>
 </div>
