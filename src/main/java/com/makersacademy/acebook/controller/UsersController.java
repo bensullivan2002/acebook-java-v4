@@ -74,8 +74,6 @@ public class UsersController {
         return new RedirectView("/login");
     }
 
-
-
     @GetMapping("/users/profile")
     public ModelAndView profile() {
         ModelAndView modelAndView = new ModelAndView("users/profile");
