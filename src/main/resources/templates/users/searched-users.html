@@ -15,16 +15,16 @@
 		</header>
 		<h1>Users</h1>
 		<div>
-			<form th:action="@{/users/searched-users}" method="get">
+			<form th:action="@{/users}" method="get">
 				<p>Search: <input type="text" name="search_user" placeholder="Enter search term..."/></p>
-				<p><input type="submit" value="Search" id="submit"/>
+				<button type="button" id="search-input">Search</button>
 			</form>
 		</div>
 		<div th:each="user : ${users}">
 			<h2 th:text="${user.firstname} + ' ' + ${user.lastname}"></h2>
 			<a
 					th:href="@{/users/other-profile/(username=${user.username})}"><img th:src="${user.profilePicture}"
-			                                                     alt="User Profile Picture"/></a>
+			                                                                       alt="User Profile Picture"/></a>
 		</div>
 	</body>
 </html>

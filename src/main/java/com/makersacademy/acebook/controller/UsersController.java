@@ -9,6 +9,7 @@ import com.makersacademy.acebook.repository.AuthoritiesRepository;
 import com.makersacademy.acebook.repository.CommentRepository;
 import com.makersacademy.acebook.repository.PostRepository;
 import com.makersacademy.acebook.repository.UserRepository;
+import com.makersacademy.acebook.model.UserSearch;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -143,5 +144,16 @@ public class UsersController {
         commentRepository.save(comment);
         String redirectUrl = "/users/other-profile/?username=" + username;
         return new RedirectView(redirectUrl);
+    }
+
+    @GetMapping("/users/searched-users")
+    public ModelAndView searchedUsers(@RequestParam("search_user") String keyword) {
+        ModelAndView modelAndView = new ModelAndView("users/searched-users");
+        UserSearch userSearch = new UserSearch();
+        List<User> searchedUsers = userSearch.searchUsers(userRepository.findAll(), keyword);
+        System.out.println(keyword);
+        System.out.println(searchedUsers);
+        modelAndView.addObject("users", searchedUsers);
+        return modelAndView;
     }
 }
