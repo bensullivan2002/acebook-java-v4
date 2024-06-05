@@ -60,8 +60,8 @@ public class CommentTest {
     public void login() {
         driver.get("http://localhost:" + port + "/login");
         // Login
-        driver.findElement(By.id("username")).sendKeys("johndoe");
-        driver.findElement(By.id("password")).sendKeys("password123");
+        driver.findElement(By.id("username")).sendKeys("testing");
+        driver.findElement(By.id("password")).sendKeys("Password123!");
         driver.findElement(By.tagName("button")).click();
     }
 

@@ -63,7 +63,7 @@ public class PostsController {
         }
         postRepository.save(post);
         if ("true".equals(fromProfilePage)) {
-            return new RedirectView("/users/profile");
+            return new RedirectView("/users/my-profile");
         }
         return new RedirectView("/posts");
     }

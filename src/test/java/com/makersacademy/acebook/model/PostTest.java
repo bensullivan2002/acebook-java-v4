@@ -18,6 +18,8 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.support.ui.Wait;
+import org.openqa.selenium.support.ui.WebDriverWait;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.flyway.FlywayMigrationStrategy;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -26,6 +28,7 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
+import java.time.Duration;
 import java.util.List;
 
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -70,8 +73,8 @@ public class PostTest {
 	public void login() {
 		driver.get("http://localhost:" + port + "/login");
 		// Login
-		driver.findElement(By.id("username")).sendKeys("johndoe");
-		driver.findElement(By.id("password")).sendKeys("password123");
+		driver.findElement(By.id("username")).sendKeys("testing");
+		driver.findElement(By.id("password")).sendKeys("Password123!");
 		driver.findElement(By.tagName("button")).click();
 	}
 
@@ -79,6 +82,7 @@ public class PostTest {
 	public void signInViewPost() {
 		login();
 		List<WebElement> element = driver.findElements(By.className("post"));
+		System.out.println(element);
 		WebElement element1 = element.get(element.size() - 1);
 		Assert.assertEquals("John\nThis is my first post!\nLikes: 15\nLike\nGreat post!\nComment", element1.getText());
 	}
@@ -92,7 +96,7 @@ public class PostTest {
 
 		List<WebElement> element = driver.findElements(By.className("post"));
 		WebElement element1 = element.get(0);
-		Assert.assertEquals("John\npost test\nLikes: 0\nLike\nComment", element1.getText());
+		Assert.assertEquals("Mariam\npost test\nLikes: 0\nLike\nComment", element1.getText());
 	}
 
 	@Test
@@ -106,10 +110,19 @@ public class PostTest {
 		WebElement like_element = driver.findElement(By.id(String.format("like_button%s", id)));
 		like_element.click();
 
-//		Find the test post and asserts that the like count is 1
 		List<WebElement> post_element = driver.findElements(By.className("post"));
 		WebElement element1 = post_element.get(0);
-		Assert.assertEquals("John\npost test\nLikes: 1\nLike\nComment", element1.getText());
+
+		long time = 3L;
+		Wait<WebDriver> wait = new WebDriverWait(driver, time);
+		WebElement finalElement = element1;
+		wait.until(d -> finalElement.isDisplayed());
+
+//		Find the test post and asserts that the like count is 1
+        post_element = driver.findElements(By.className("post"));
+        element1 = post_element.get(0);
+
+		Assert.assertEquals("Mariam\npost test\nLikes: 1\nLike\nComment", element1.getText());
 		postRepository.deleteTestPost();
 	}
 
