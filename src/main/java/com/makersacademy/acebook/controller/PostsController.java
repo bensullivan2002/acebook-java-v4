@@ -8,6 +8,8 @@ import com.makersacademy.acebook.repository.CommentRepository;
 import com.makersacademy.acebook.repository.PostRepository;
 import com.makersacademy.acebook.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
@@ -20,6 +22,7 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.view.RedirectView;
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 
@@ -60,25 +63,27 @@ public class PostsController {
         }
         postRepository.save(post);
         if ("true".equals(fromProfilePage)) {
-            return new RedirectView("/users/profile");
+            return new RedirectView("/users/my-profile");
         }
         return new RedirectView("/posts");
     }
 
     @PostMapping("/posts-like")
-    public RedirectView like(@RequestParam("postId") Long postId, @RequestParam(required = false) String fromProfilePage) {
+    @ResponseBody
+    public ResponseEntity<Map<String, Object>> like(@RequestParam("postId") Long postId) {
         Optional<Post> postOptional = postRepository.findById(postId);
         Post post = postOptional.get();
         post.incrementLikeCount();
         postRepository.save(post);
-        if ("true".equals(fromProfilePage)) {
-            return new RedirectView("/users/profile");
-        }
-        return new RedirectView("/posts");
+        Map<String, Object> response = new HashMap<>();
+        response.put("success", true);
+        response.put("newLikeCount", post.getLikeCount());
+
+        return ResponseEntity.ok(response);
     }
 
     @PostMapping("/posts-comments")
-    public RedirectView comment(@RequestParam("postId") Long postId, @RequestParam("content") String content, @RequestParam(required = false) String fromProfilePage) {
+    public RedirectView comment(@RequestParam("postId") Long postId, @RequestParam("content") String content, @RequestParam(required = false) String fromOtherProfilePage) {
         Optional<Post> postOptional = postRepository.findById(postId);
         Post post = postOptional.get();
         Comment comment = new Comment();
@@ -88,8 +93,8 @@ public class PostsController {
         comment.setPost(post);
         comment.setUser_id(userRepository.findIdByUsername(currentPrincipleName));
         commentRepository.save(comment);
-        if ("true".equals(fromProfilePage)) {
-            return new RedirectView("/users/profile");
+        if ("true".equals(fromOtherProfilePage)) {
+            return new RedirectView("/users/other-profile/{username}");
         }
         return new RedirectView("/posts");
     }

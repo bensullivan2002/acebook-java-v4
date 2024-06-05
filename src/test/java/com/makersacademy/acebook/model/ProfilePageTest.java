@@ -14,6 +14,8 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.support.ui.Wait;
+import org.openqa.selenium.support.ui.WebDriverWait;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.web.server.LocalServerPort;
@@ -62,9 +64,10 @@ public class ProfilePageTest {
     }
 
     public void login() {
-        driver.get("http://localhost:" +port+ "/users/profile");
-        driver.findElement(By.id("username")).sendKeys("johndoe");
-        driver.findElement(By.id("password")).sendKeys("password123");
+        driver.get("http://localhost:" +port+ "/users/my-profile");
+        // Login
+        driver.findElement(By.id("username")).sendKeys("testing");
+        driver.findElement(By.id("password")).sendKeys("Password123!");
         driver.findElement(By.tagName("button")).click();
     }
 
@@ -72,11 +75,13 @@ public class ProfilePageTest {
     public void profilePageDisplaysUserInfo() {
         login();
 
-        User user = userRepository.findByUsername("johndoe");
+        User user = userRepository.findByUsername("testing");
 
         String firstname = user.getFirstname();
         String lastname = user.getLastname();
         String bio = user.getBio();
+
+        System.out.println(firstname);
 
 
         WebElement firstNameElement = driver.findElement(By.id("firstname"));
@@ -91,13 +96,17 @@ public class ProfilePageTest {
     public void profilePageDisplaysUserPosts() {
         login();
 
-        List<WebElement> posts = driver.findElements(By.id("post-content"));
-        String[] expectedPosts = {
-                "Excited to be here!",
-                "This is my first post!"};
+        String newPostContent = "This is a testing post!";
+        WebElement postInput = driver.findElement(By.id("content"));
+        WebElement addPostButton = driver.findElement(By.id("content_create"));
+        postInput.sendKeys(newPostContent);
+        addPostButton.click();
 
-        for (int i = 0; i < expectedPosts.length; i++) {
-            assertEquals(expectedPosts[i], posts.get(i).getText());
+        List<WebElement> posts = driver.findElements(By.id("post-content"));
+        String expectedPost = "This is a testing post!";
+
+        for (int i = 0; i < posts.size(); i++) {
+            assertEquals(expectedPost, posts.get(i).getText());
         }
     }
 
@@ -133,10 +142,19 @@ public class ProfilePageTest {
         WebElement like_element = driver.findElement(By.id(String.format("like_button%s", id)));
         like_element.click();
 
-//		Find the test post and asserts that the like count is 1
         List<WebElement> post_element = driver.findElements(By.className("post"));
         WebElement element1 = post_element.get(0);
-        Assert.assertEquals("John\nThis is a testing post!\nLikes: 1\nLike\nComment", element1.getText());
+
+        long time = 3L;
+        Wait<WebDriver> wait = new WebDriverWait(driver, time);
+        WebElement finalElement = element1;
+        wait.until(d -> finalElement.isDisplayed());
+
+//		Find the test post and asserts that the like count is 1
+        post_element = driver.findElements(By.className("post"));
+        element1 = post_element.get(0);
+
+        Assert.assertEquals("This is a testing post!\nLikes: 1\nLike\nComment", element1.getText());
         postRepository.deleteTestPost();
     }
 
