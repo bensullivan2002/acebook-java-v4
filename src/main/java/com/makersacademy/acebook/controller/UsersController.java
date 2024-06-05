@@ -12,6 +12,10 @@ import com.makersacademy.acebook.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -34,6 +38,7 @@ public class UsersController {
     private final AuthoritiesRepository authoritiesRepository;
     private final PostRepository postRepository;
     private final CommentRepository commentRepository;
+    private PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
     @Autowired
     public UsersController(
@@ -64,6 +69,8 @@ public class UsersController {
         if (!isPasswordValid(user.getPassword()) || !Objects.equals(user.getPassword(), confirmPassword)) {
             return new RedirectView("/users/new?error=password");
         }
+        String encodedPassword = passwordEncoder.encode(user.getPassword());
+        user.setPassword(encodedPassword);
         user.setProfilePicture("https://res.cloudinary.com/dk3vxa56n/image/upload/c_limit,h_60,w_90/v1717509379/mxi8udntfuauiaxy5vyj.png");
         userRepository.save(user);
         Authority authority = new Authority(user.getUsername(), "ROLE_USER");
@@ -77,9 +84,7 @@ public class UsersController {
         ModelAndView modelAndView = new ModelAndView("users/my-profile");
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String currentPrincipleName = authentication.getName();
-
         User user = userRepository.findByUsername(currentPrincipleName);
-
         modelAndView.addObject("user", user);
         List<Post> posts = postRepository.findByUserIdOrderByIdDesc(
                 userRepository.findIdByUsername(currentPrincipleName));
@@ -91,7 +96,7 @@ public class UsersController {
 
     @PostMapping("/profile-pic-add")
     public RedirectView profilePicAdd(@RequestParam(
-            value = "imageProfileInfoInput", required = false) String imageProfileInfo) throws IOException {
+            value = "imageProfileInfoInput", required=false) String imageProfileInfo) throws IOException {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String currentPrincipleName = authentication.getName();
         User user = userRepository.findByUsername(currentPrincipleName);
