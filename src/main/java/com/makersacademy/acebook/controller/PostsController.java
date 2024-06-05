@@ -83,7 +83,7 @@ public class PostsController {
     }
 
     @PostMapping("/posts-comments")
-    public RedirectView comment(@RequestParam("postId") Long postId, @RequestParam("content") String content, @RequestParam(required = false) String fromProfilePage) {
+    public RedirectView comment(@RequestParam("postId") Long postId, @RequestParam("content") String content, @RequestParam(required = false) String fromOtherProfilePage) {
         Optional<Post> postOptional = postRepository.findById(postId);
         Post post = postOptional.get();
         Comment comment = new Comment();
@@ -93,8 +93,8 @@ public class PostsController {
         comment.setPost(post);
         comment.setUser_id(userRepository.findIdByUsername(currentPrincipleName));
         commentRepository.save(comment);
-        if ("true".equals(fromProfilePage)) {
-            return new RedirectView("/users/profile");
+        if ("true".equals(fromOtherProfilePage)) {
+            return new RedirectView("/users/other-profile/{username}");
         }
         return new RedirectView("/posts");
     }

@@ -17,7 +17,7 @@
 		<div th:each="user : ${users}">
 			<h2 th:text="${user.firstname} + ' ' + ${user.lastname}"></h2>
 			<a
-					th:href="@{/users/profile(userUrl=${user.username})}"><img th:src="${user.profilePicture}"
+					th:href="@{/users/profile/(username=${user.username})}"><img th:src="${user.profilePicture}"
 			                                                     alt="User Profile Picture"/></a>
 		</div>
 	</body>
