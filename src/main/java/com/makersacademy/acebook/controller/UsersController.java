@@ -151,8 +151,6 @@ public class UsersController {
         ModelAndView modelAndView = new ModelAndView("users/searched-users");
         UserSearch userSearch = new UserSearch();
         List<User> searchedUsers = userSearch.searchUsers(userRepository.findAll(), keyword);
-        System.out.println(keyword);
-        System.out.println(searchedUsers);
         modelAndView.addObject("users", searchedUsers);
         return modelAndView;
     }
