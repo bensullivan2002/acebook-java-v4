@@ -131,13 +131,6 @@ public class UsersController {
         return getUserModelAndView(modelAndView, username, user);
     }
 
-    @PostMapping("/users/other-profile/{username}")
-    public RedirectView comment(@RequestParam("postId") Long postId, @RequestParam("content") String content, @RequestParam("username") String username) {
-        PostsController.createPostComment(postId, content, postRepository, userRepository, commentRepository);
-        String redirectUrl = "/users/other-profile/?username=" + username;
-        return new RedirectView(redirectUrl);
-    }
-
     @GetMapping("/users/searched-users")
     public ModelAndView searchedUsers(@RequestParam("search_user") String keyword) {
         ModelAndView modelAndView = new ModelAndView("users/searched-users");

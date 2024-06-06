@@ -95,10 +95,14 @@ public class PostsController {
     }
 
     @PostMapping("/posts-comments")
-    public RedirectView comment(@RequestParam("postId") Long postId, @RequestParam("content") String content, @RequestParam(required = false) String fromOtherProfilePage) {
+    public RedirectView comment(@RequestParam("postId") Long postId, @RequestParam("content") String content, @RequestParam(required = false) String fromProfilePage, @RequestParam(value="profileUsername", required = false) String fromOtherProfilePage) {
         createPostComment(postId, content, postRepository, userRepository, commentRepository);
-        if ("true".equals(fromOtherProfilePage)) {
-            return new RedirectView("/users/other-profile/{username}");
+        if ("true".equals(fromProfilePage)) {
+            return new RedirectView("/users/my-profile");
+        }
+        if (fromOtherProfilePage != null) {
+            String redirectUrl = "/users/other-profile/?username=" + fromOtherProfilePage;
+            return new RedirectView(redirectUrl);
         }
         return new RedirectView("/posts");
     }
