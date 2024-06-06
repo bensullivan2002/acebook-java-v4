@@ -185,8 +185,25 @@
     <link rel="stylesheet" href="/posts.css"/>
 
     <style>
-        .hidden {
-            display: none;
+        /* Custom styling */
+        body {
+            background-color: #f8f9fa;
+            font-family: Arial, sans-serif;
+        }
+        .card {
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        .post-card {
+            border-left: 5px solid #ff6b6b; /* Red */
+            margin-bottom: 20px;
+            background-color: #fff; /* White */
+        }
+        .comment-card {
+            border-left: 5px solid #45aaf2; /* Blue */
+            background-color: #f1f3f5;
+            margin-left: 40px;
+            margin-bottom: 10px;
         }
         .profile-info {
             display: flex;
@@ -204,34 +221,49 @@
             font-weight: bold;
             color: #343a40;
         }
-        .post-card {
-            border-left: 5px solid #007bff;
-            margin-bottom: 20px;
-        }
-        .comment-card {
-            border-left: 5px solid #28a745;
-            background-color: #f1f3f5;
-            margin-left: 40px;
-            margin-bottom: 10px;
-        }
-        .post-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-        .post-body {
-            margin-top: 10px;
-        }
-        .comment {
-            margin-top: 10px;
-            padding: 10px;
-        }
         .nav-bar {
             margin-bottom: 20px;
         }
-        .like-button,
-        .comment-button {
-            display: inline-block;
+
+        /* Additional Bootstrap styling */
+        .navbar {
+            background-color: #ffc107; /* Navbar color */
+        }
+        .navbar-brand {
+            color: #343a40; /* Brand text color */
+        }
+        .nav-link {
+            color: #343a40; /* Navbar link color */
+        }
+        .nav-link:hover {
+            color: #212529; /* Navbar link hover color */
+        }
+        .btn-outline-success {
+            color: #28a745; /* Button text color */
+            border-color: #28a745; /* Button border color */
+        }
+        .btn-outline-success:hover {
+            color: #fff; /* Button hover text color */
+            background-color: #28a745; /* Button hover background color */
+            border-color: #28a745; /* Button hover border color */
+        }
+        .btn-outline-secondary {
+            color: #007bff; /* Secondary button text color */
+            border-color: #007bff; /* Secondary button border color */
+        }
+        .btn-outline-secondary:hover {
+            color: #fff; /* Secondary button hover text color */
+            background-color: #007bff; /* Secondary button hover background color */
+            border-color: #007bff; /* Secondary button hover border color */
+        }
+        .form-control {
+            border-color: #6c757d; /* Form control border color */
+        }
+        .form-control:focus {
+            color: #495057; /* Form control text color */
+            background-color: #fff; /* Form control background color */
+            border-color: #495057; /* Form control focus border color */
+            box-shadow: 0 0 0 0.25rem rgba(38,143,255,.25); /* Form control focus shadow */
         }
     </style>
 
@@ -385,19 +417,24 @@
 					</div>
 				</div>
 			</div>
-			<form class="like_button mt-3" th:onsubmit="event.preventDefault(); likePost([[${post.id}]]);">
-				<input type="hidden" name="postId" th:value="${post.id}"/>
-				<input type="hidden" name="_csrf" th:value="${_csrf.token}" />
-				<button th:text="'Likes: ' + ${post.likeCount}" type="submit" th:id="'like_button' + ${post.id}" class="btn btn-outline-primary"></button>
-			</form>
-			<form th:action="@{/posts-comments}" method="post" class="mt-2">
-				<input type="hidden" name="postId" th:value="${post.id}"/>
-				<div class="input-group hidden" th:id="'comment-content' + ${post.id}">
-					<input th:id="'comment-input' + ${post.id}" type="text" placeholder="Write a comment..." name="content" class="form-control"/>
-					<button type="submit" th:id="'submit_button' + ${post.id}" class="btn btn-outline-secondary hidden">Comment</button>
+			<div class="d-flex align-items-center">
+				<form class="like_button" th:onsubmit="event.preventDefault(); likePost([[${post.id}]]);">
+					<input type="hidden" name="postId" th:value="${post.id}"/>
+					<input type="hidden" name="_csrf" th:value="${_csrf.token}" />
+					<button th:text="'Likes: ' + ${post.likeCount}" type="submit" th:id="'like_button' + ${post.id}"></button>
+				</form>
+
+				<form th:action="@{/posts-comments}" method="post">
+				<input type="hidden" name="postId" th:value="${post.id}" />
+				<div th:id="'comment-content' + ${post.id}" class="hidden">
+					<div class="input-group mb-3" th:id="'comment-content' + ${post.id}">
+						<input th:id="'comment-input' + ${post.id}" type="text" class="form-control" placeholder="Write a comment..." aria-label="Write a comment..." name="content" aria-describedby="button-addon2">
+						<button th:id="'submit_button' + ${post.id}" class="btn btn-outline-secondary" type="submit">Submit Comment</button>
+					</div>
 				</div>
-				<button type="button" th:id="'comment_button' + ${post.id}" th:onclick="'showContentField(' + ${post.id} + ')'" class="btn btn-outline-secondary">Comment</button>
-			</form>
+					<button type="button" th:id="'comment_button' + ${post.id}" th:onclick="'showContentField(' + ${post.id} + ')'">Comment</button>
+				</form>
+			</div>
 		</div>
 	</div>
 </div>

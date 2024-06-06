@@ -51,3 +51,10 @@ body {
 .nav-bar {
     margin-bottom: 20px;
 }
+
+input[type="text"], input[type="submit"], button {
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    margin: 5px 5px;
+}
