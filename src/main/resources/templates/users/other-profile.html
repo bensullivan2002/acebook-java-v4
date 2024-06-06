@@ -10,9 +10,9 @@
 		</style>
 		<script>
 			function showContentField(postId) {
-				var contentField = document.getElementById('comment-content' + postId);
-				var submitButton = document.getElementById('submit_button' + postId);
-				var commentButton = document.getElementById('comment_button' + postId);
+				const contentField = document.getElementById('comment-content' + postId);
+				const submitButton = document.getElementById('submit_button' + postId);
+				const commentButton = document.getElementById('comment_button' + postId);
 				contentField.classList.remove('hidden');
 				submitButton.classList.remove('hidden');
 				commentButton.classList.add('hidden');
@@ -20,8 +20,8 @@
 		</script>
 		<script>
 			function likePost(postId) {
-			var likeCountElement = document.getElementById('like_count' + postId);
-			var csrfToken = document.querySelector('input[name="_csrf"]').value;
+			const likeCountElement = document.getElementById('like_count' + postId);
+			const csrfToken = document.querySelector('input[name="_csrf"]').value;
 
 			fetch('/posts-like', {
 			method: 'POST',
@@ -54,13 +54,13 @@
 			</div>
 		</header>
 
-		<h1>User Profile</h1>
+		<h1>User Profile</h1> <!-- This needs to replaced with user-specific details -->
 
 		<img id="profile-thumbnail-image"/>
 		<!-- Display Profile Picture -->
 
 		<!-- Display user information -->
-		<h2>User Information</h2>
+		<h2>User Information</h2> <!-- This needs to replaced with user-specific details -->
 		<img id="profile-picture" th:src="${user.profilePicture}" alt="An uploaded image">
 		<p>Username: <span id="username" th:text="${user.username}">Username</span></p>
 		<p>First Name: <span id="firstname" th:text="${user.firstname}">First Name</span></p>

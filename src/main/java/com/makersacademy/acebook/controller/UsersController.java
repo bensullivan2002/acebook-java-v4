@@ -85,13 +85,19 @@ public class UsersController {
         ModelAndView modelAndView = new ModelAndView("users/my-profile");
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String currentPrincipleName = authentication.getName();
+
         User user = userRepository.findByUsername(currentPrincipleName);
+        return getUserModelAndView(modelAndView, currentPrincipleName, user);
+    }
+
+    private ModelAndView getUserModelAndView(ModelAndView modelAndView, String currentPrincipleName, User user) {
         modelAndView.addObject("user", user);
         List<Post> posts = postRepository.findByUserIdOrderByIdDesc(
                 userRepository.findIdByUsername(currentPrincipleName));
         modelAndView.addObject("posts", posts);
         modelAndView.addObject("post", new Post());
         modelAndView.addObject("comment", new Comment());
+
         return modelAndView;
     }
 
@@ -100,6 +106,7 @@ public class UsersController {
             value = "imageProfileInfoInput", required=false) String imageProfileInfo) throws IOException {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String currentPrincipleName = authentication.getName();
+
         User user = userRepository.findByUsername(currentPrincipleName);
         ObjectMapper mapper = new ObjectMapper();
         Map<String, String> map = mapper.readValue(imageProfileInfo, Map.class);
@@ -121,27 +128,12 @@ public class UsersController {
         ModelAndView modelAndView = new ModelAndView("users/other-profile");
 
         User user = userRepository.findByUsername(username);
-
-        modelAndView.addObject("user", user);
-        List<Post> posts = postRepository.findByUserIdOrderByIdDesc(
-                userRepository.findIdByUsername(username));
-        modelAndView.addObject("posts", posts);
-        modelAndView.addObject("post", new Post());
-        modelAndView.addObject("comment", new Comment());
-        return modelAndView;
+        return getUserModelAndView(modelAndView, username, user);
     }
 
     @PostMapping("/users/other-profile/{username}")
     public RedirectView comment(@RequestParam("postId") Long postId, @RequestParam("content") String content, @RequestParam("username") String username) {
-        Optional<Post> postOptional = postRepository.findById(postId);
-        Post post = postOptional.get();
-        Comment comment = new Comment();
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        String currentPrincipleName = authentication.getName();
-        comment.setContent(content);
-        comment.setPost(post);
-        comment.setUser_id(userRepository.findIdByUsername(currentPrincipleName));
-        commentRepository.save(comment);
+        PostsController.createPostComment(postId, content, postRepository, userRepository, commentRepository);
         String redirectUrl = "/users/other-profile/?username=" + username;
         return new RedirectView(redirectUrl);
     }

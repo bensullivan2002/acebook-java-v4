@@ -10,17 +10,17 @@
   </style>
   <script>
     function showContentField(postId) {
-      var contentField = document.getElementById('comment-content' + postId);
-      var submitButton = document.getElementById('submit_button' + postId);
-      var commentButton = document.getElementById('comment_button' + postId);
+      const contentField = document.getElementById('comment-content' + postId);
+      const submitButton = document.getElementById('submit_button' + postId);
+      const commentButton = document.getElementById('comment_button' + postId);
       contentField.classList.remove('hidden');
       submitButton.classList.remove('hidden');
       commentButton.classList.add('hidden');
     }
     function showUploadSubmit(){
-      var uploadSubmit = document.getElementById('upload_submit');
-      var uploadWidget = document.getElementById('upload_widget');
-      var profileUpload = document.getElementById('profile-upload');
+      const uploadSubmit = document.getElementById('upload_submit');
+      const uploadWidget = document.getElementById('upload_widget');
+      const profileUpload = document.getElementById('profile-upload');
 
 
       uploadSubmit.classList.remove('hidden');
@@ -28,16 +28,16 @@
       profileUpload.classList.remove('hidden');
     }
     function showImageField(){
-		  var imageView = document.getElementById('post-thumbnail-image');
-		  var uploadWidget = document.getElementById('upload_post_widget');
-		  var imagePreview = document.getElementById('image-preview');
+		  const imageView = document.getElementById('post-thumbnail-image');
+		  const uploadWidget = document.getElementById('upload_post_widget');
+		  const imagePreview = document.getElementById('image-preview');
 		  imageView.classList.remove('hidden');
 		  uploadWidget.classList.remove('hidden');
 		  imagePreview.classList.remove('hidden');
     	}
     function likePost(postId) {
-            var likeCountElement = document.getElementById('like_count' + postId);
-            var csrfToken = document.querySelector('input[name="_csrf"]').value;
+            const likeCountElement = document.getElementById('like_count' + postId);
+            const csrfToken = document.querySelector('input[name="_csrf"]').value;
 
             fetch('/posts-like', {
                 method: 'POST',
@@ -70,7 +70,7 @@
 		<a href="/login">Login</a>
 	</div>
 </header>
-<h1>User Profile</h1>
+<h1>User Profile</h1> <!-- This needs to replaced with user-specific details -->
 
 <img id="profile-thumbnail-image"/>
 <!-- Display Profile Picture -->
@@ -85,23 +85,24 @@
 
 <script src="https://upload-widget.cloudinary.com/latest/global/all.js" type="text/javascript"></script>
 <script type="text/javascript">
-  var myWidget = cloudinary.createUploadWidget({
-            cloudName: 'dk3vxa56n',
-            uploadPreset: 'test_preset'}, (error, result) => {
-            if (!error && result && result.event === "success") {
-              console.log('Done! Here is the image info: ', result.info);
-              document.getElementById("imageProfileInfoInput").value = JSON.stringify(result.info);
-              document.getElementById("profile-thumbnail-image").src = result.info.thumbnail_url;
-            }
-          }
-  )
-  document.getElementById("upload_widget").addEventListener("click", function(){
+	const myWidget = cloudinary.createUploadWidget({
+				cloudName: 'dk3vxa56n',
+				uploadPreset: 'test_preset'
+			}, (error, result) => {
+				if (!error && result && result.event === "success") {
+					console.log('Done! Here is the image info: ', result.info);
+					document.getElementById("imageProfileInfoInput").value = JSON.stringify(result.info);
+					document.getElementById("profile-thumbnail-image").src = result.info.thumbnail_url;
+				}
+			}
+	);
+	document.getElementById("upload_widget").addEventListener("click", function(){
     myWidget.open();
   }, false);
 </script>
 
 <!-- Display user information -->
-<h2>User Information</h2>
+<h2>User Information</h2> <!-- This needs to replaced with user-specific details -->
 <img id="profile-picture" th:src="${user.profilePicture}" alt="An uploaded image">
 <p>Username: <span id="username" th:text="${user.username}">Username</span></p>
 <p>First Name: <span id="firstname" th:text="${user.firstname}">First Name</span></p>
@@ -154,7 +155,7 @@
 <!--Widget2 for Post Feature-->
 <script src="https://upload-widget.cloudinary.com/latest/global/all.js" type="text/javascript"></script>
 <script type="text/javascript">
-  var myWidget2 = cloudinary.createUploadWidget({
+  const myWidget2 = cloudinary.createUploadWidget({
             cloudName: 'dk3vxa56n',
             uploadPreset: 'test_preset'}, (error, result) => {
             if (!error && result && result.event === "success") {
