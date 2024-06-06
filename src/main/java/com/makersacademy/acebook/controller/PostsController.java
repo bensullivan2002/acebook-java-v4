@@ -40,6 +40,18 @@ public class PostsController {
         this.userRepository = userRepository;
     }
 
+    static void createPostComment(@RequestParam("postId") Long postId, @RequestParam("content") String content, PostRepository postRepository, UserRepository userRepository, CommentRepository commentRepository) {
+        Optional<Post> postOptional = postRepository.findById(postId);
+        Post post = postOptional.get();
+        Comment comment = new Comment();
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String currentPrincipleName = authentication.getName();
+        comment.setContent(content);
+        comment.setPost(post);
+        comment.setUser_id(userRepository.findIdByUsername(currentPrincipleName));
+        commentRepository.save(comment);
+    }
+
     @GetMapping("/posts")
     public String index(Model model) {
         Iterable<Post> posts = postRepository.findAllByOrderByIdDesc();
@@ -84,15 +96,7 @@ public class PostsController {
 
     @PostMapping("/posts-comments")
     public RedirectView comment(@RequestParam("postId") Long postId, @RequestParam("content") String content, @RequestParam(required = false) String fromOtherProfilePage) {
-        Optional<Post> postOptional = postRepository.findById(postId);
-        Post post = postOptional.get();
-        Comment comment = new Comment();
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        String currentPrincipleName = authentication.getName();
-        comment.setContent(content);
-        comment.setPost(post);
-        comment.setUser_id(userRepository.findIdByUsername(currentPrincipleName));
-        commentRepository.save(comment);
+        createPostComment(postId, content, postRepository, userRepository, commentRepository);
         if ("true".equals(fromOtherProfilePage)) {
             return new RedirectView("/users/other-profile/{username}");
         }

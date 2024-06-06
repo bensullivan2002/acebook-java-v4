@@ -12,51 +12,51 @@
     </style>
     <script>
         function showContentField(postId) {
-          var contentField = document.getElementById('comment-content' + postId);
-          var submitButton = document.getElementById('submit_button' + postId);
-          var commentButton = document.getElementById('comment_button' + postId);
-          contentField.classList.remove('hidden');
+	        const contentField = document.getElementById('comment-content' + postId);
+	        const submitButton = document.getElementById('submit_button' + postId);
+	        const commentButton = document.getElementById('comment_button' + postId);
+	        contentField.classList.remove('hidden');
           submitButton.classList.remove('hidden');
           commentButton.classList.add('hidden');
         }
-		function showUploadSubmit(){
-		  var uploadSubmit = document.getElementById('upload_submit');
-		  var uploadWidget = document.getElementById('upload_widget');
-		  var profileUpload = document.getElementById('profile-upload');
-		  uploadSubmit.classList.remove('hidden');
-		  uploadWidget.classList.remove('hidden');
-		  profileUpload.classList.remove('hidden');
-    	}
-		function showImageField(){
-		  var imageView = document.getElementById('thumbnail-image');
-		  var uploadWidget = document.getElementById('upload_widget');
-		  var imagePreview = document.getElementById('image-preview');
-		  imageView.classList.remove('hidden');
-		  uploadWidget.classList.remove('hidden');
-		  imagePreview.classList.remove('hidden');
-    	}
-		function likePost(postId) {
-            var likeCountElement = document.getElementById('like_count' + postId);
-            var csrfToken = document.querySelector('input[name="_csrf"]').value;
+				function showUploadSubmit(){
+					const uploadSubmit = document.getElementById('upload_submit');
+					const uploadWidget = document.getElementById('upload_widget');
+					const profileUpload = document.getElementById('profile-upload');
+					uploadSubmit.classList.remove('hidden');
+				  uploadWidget.classList.remove('hidden');
+				  profileUpload.classList.remove('hidden');
+		      }
+				function showImageField(){
+					const imageView = document.getElementById('thumbnail-image');
+					const uploadWidget = document.getElementById('upload_widget');
+					const imagePreview = document.getElementById('image-preview');
+					imageView.classList.remove('hidden');
+				  uploadWidget.classList.remove('hidden');
+				  imagePreview.classList.remove('hidden');
+		      }
+				function likePost(postId) {
+					const likeCountElement = document.getElementById('like_count' + postId);
+					const csrfToken = document.querySelector('input[name="_csrf"]').value;
 
-            fetch('/posts-like', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/x-www-form-urlencoded',
-                    'X-CSRF-TOKEN': csrfToken
-                },
-                body: new URLSearchParams({
-                    postId: postId
-                })
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (data.success) {
-                    likeCountElement.textContent = 'Likes: ' + data.newLikeCount;
-                }
-            })
-            .catch(error => console.error('Error:', error));
-        }
+					fetch('/posts-like', {
+		                method: 'POST',
+		                headers: {
+		                    'Content-Type': 'application/x-www-form-urlencoded',
+		                    'X-CSRF-TOKEN': csrfToken
+		                },
+		                body: new URLSearchParams({
+		                    postId: postId
+		                })
+		            })
+		            .then(response => response.json())
+		            .then(data => {
+		                if (data.success) {
+		                    likeCountElement.textContent = 'Likes: ' + data.newLikeCount;
+		                }
+		            })
+		            .catch(error => console.error('Error:', error));
+		        }
 
     </script>
 </head>
