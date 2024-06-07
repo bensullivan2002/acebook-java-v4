@@ -36,8 +36,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .antMatchers("/users/my-profile").hasRole("USER")
                 .antMatchers("/users").hasRole("USER")
                 .antMatchers("/users/other-profile").hasRole("USER")
-//                .request.anyRequest().authenticated();
-                .and().formLogin();
+                .and().formLogin().defaultSuccessUrl("/posts", true);
     }
 
     @Bean
