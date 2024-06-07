@@ -85,19 +85,13 @@ public class UsersController {
         ModelAndView modelAndView = new ModelAndView("users/my-profile");
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String currentPrincipleName = authentication.getName();
-
         User user = userRepository.findByUsername(currentPrincipleName);
-        return getUserModelAndView(modelAndView, currentPrincipleName, user);
-    }
-
-    private ModelAndView getUserModelAndView(ModelAndView modelAndView, String currentPrincipleName, User user) {
         modelAndView.addObject("user", user);
         List<Post> posts = postRepository.findByUserIdOrderByIdDesc(
                 userRepository.findIdByUsername(currentPrincipleName));
         modelAndView.addObject("posts", posts);
         modelAndView.addObject("post", new Post());
         modelAndView.addObject("comment", new Comment());
-
         return modelAndView;
     }
 
@@ -113,29 +107,30 @@ public class UsersController {
         String thumbnail_url = map.get("thumbnail_url");
         user.setProfilePicture(thumbnail_url);
         userRepository.save(user);
-        return new RedirectView("/users/profile");
+        return new RedirectView("/users/my-profile");
     }
 
     @GetMapping("/users")
     public ModelAndView users() {
         ModelAndView modelAndView = new ModelAndView("users/users");
         modelAndView.addObject("users", userRepository.findAll());
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String currentPrincipleName = authentication.getName();
+        modelAndView.addObject("currentUser", currentPrincipleName);
         return modelAndView;
     }
 
     @GetMapping("/users/other-profile/")
     public ModelAndView showOtherProfile(@RequestParam("username") String username) {
         ModelAndView modelAndView = new ModelAndView("users/other-profile");
-
         User user = userRepository.findByUsername(username);
-        return getUserModelAndView(modelAndView, username, user);
-    }
-
-    @PostMapping("/users/other-profile/{username}")
-    public RedirectView comment(@RequestParam("postId") Long postId, @RequestParam("content") String content, @RequestParam("username") String username) {
-        PostsController.createPostComment(postId, content, postRepository, userRepository, commentRepository);
-        String redirectUrl = "/users/other-profile/?username=" + username;
-        return new RedirectView(redirectUrl);
+        modelAndView.addObject("user", user);
+        List<Post> posts = postRepository.findByUserIdOrderByIdDesc(
+                userRepository.findIdByUsername(username));
+        modelAndView.addObject("posts", posts);
+        modelAndView.addObject("post", new Post());
+        modelAndView.addObject("comment", new Comment());
+        return modelAndView;
     }
 
     @GetMapping("/users/searched-users")

@@ -1,0 +1,236 @@
+
+
+
+
+
+
+4:32
+/* General styles */
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f0f2f5;
+    margin: 0;
+    padding: 0;
+}
+
+h1 {
+    text-align: center;
+    color: #4267b2;
+    margin: 20px 0;
+}
+
+.container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+    background-color: white;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+.create-post-form h2 {
+    margin-top: 0;
+}
+
+
+form p {
+    margin: 10px 0;
+}
+
+input[type="text"], input[type="submit"], button {
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    margin: 5px 5px;
+}
+
+input[type="submit"], button {
+    background-color: #4267b2;
+    color: white;
+    border: none;
+    cursor: pointer;
+}
+
+input[type="submit"]:hover, button:hover {
+    background-color: #365899;
+}
+
+ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+ul.posts-list {
+    margin-top: 20px;
+}
+
+li.post {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    margin-bottom: 20px;
+    padding: 15px;
+    background-color: #fff;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    border-radius: 5px;
+}
+
+.post-header {
+    display: flex;
+    float: right;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.profile-picture {
+    border-radius: 50%;
+    width: 50px;
+    height: 50px;
+    object-fit: cover;
+    margin-right: 10px;
+}
+
+.post-user-name {
+    font-weight: bold;
+    color: #4267b2;
+}
+
+.post-content p {
+    margin: 5px 0;
+}
+
+.post-image {
+    max-width: 100%;
+    border-radius: 5px;
+    margin-top: 10px;
+}
+
+.like-button-form {
+    margin-top: 10px;
+}
+
+.comment-list {
+    margin-top: 10px;
+    padding-left: 20px;
+}
+
+.comment-list h3 {
+    margin: 0 0 10px 0;
+    font-size: 16px;
+}
+
+.comment-form {
+    margin-top: 10px;
+}
+
+.hidden {
+    display: none;
+}
+
+div.signed-in-user {
+	float: right;
+}
+
+.comment-input-group {
+    margin-left: 10px; /* Adjust as needed */
+}
+
+.comment-form {
+    display: flex;
+    align-items: center;
+}
+
+.user-profile-pic {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            margin-bottom: 10px;
+            /* Center the image */
+            margin-left: auto;
+            margin-right: auto;
+            display: block;
+}
+
+.user-container {
+            text-align: center;
+            margin-bottom: 20px;
+}
+
+body {
+            background-color: #f8f9fa;
+            font-family: Arial, sans-serif;
+        }
+        .card {
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        .post-card {
+            border-left: 5px solid #ff6b6b; /* Red */
+            margin-bottom: 20px;
+            background-color: #fff; /* White */
+        }
+        .comment-card {
+            border-left: 5px solid #45aaf2; /* Blue */
+            background-color: #f1f3f5;
+            margin-left: 40px;
+            margin-bottom: 10px;
+        }
+        .profile-info {
+            display: flex;
+            align-items: center;
+            margin-left: auto;
+        }
+        .profile-pic {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            margin-left: 10px;
+        }
+        .profile-name {
+            margin-left: 10px;
+            font-weight: bold;
+            color: #343a40;
+        }
+        .nav-bar {
+            margin-bottom: 20px;
+        }
+
+        /* Additional Bootstrap styling */
+        .navbar {
+            background-color: #ffc107; /* Navbar color */
+        }
+        .navbar-brand {
+            color: #343a40; /* Brand text color */
+        }
+        .nav-link {
+            color: #343a40; /* Navbar link color */
+        }
+        .nav-link:hover {
+            color: #212529; /* Navbar link hover color */
+        }
+        .btn-outline-success {
+            color: #28a745; /* Button text color */
+            border-color: #28a745; /* Button border color */
+        }
+        .btn-outline-success:hover {
+            color: #fff; /* Button hover text color */
+            background-color: #28a745; /* Button hover background color */
+            border-color: #28a745; /* Button hover border color */
+        }
+        .btn-outline-secondary {
+            color: #007bff; /* Secondary button text color */
+            border-color: #007bff; /* Secondary button border color */
+        }
+        .btn-outline-secondary:hover {
+            color: #fff; /* Secondary button hover text color */
+            background-color: #007bff; /* Secondary button hover background color */
+            border-color: #007bff; /* Secondary button hover border color */
+        }
+        .form-control {
+            border-color: #6c757d; /* Form control border color */
+        }
+        .form-control:focus {
+            color: #495057; /* Form control text color */
+            background-color: #fff; /* Form control background color */
+            border-color: #495057; /* Form control focus border color */
+            box-shadow: 0 0 0 0.25rem rgba(38,143,255,.25); /* Form control focus shadow */
+        }
