@@ -84,7 +84,7 @@ public class PostTest {
 		List<WebElement> element = driver.findElements(By.className("post"));
 		System.out.println(element);
 		WebElement element1 = element.get(element.size() - 1);
-		Assert.assertEquals("John\nThis is my first post!\nLikes: 15\nLike\nGreat post!\nComment", element1.getText());
+		Assert.assertEquals("John\nThis is my first post!\nGreat post!\nLikes: 15\nComment", element1.getText());
 	}
 
 	@Test
@@ -96,7 +96,7 @@ public class PostTest {
 
 		List<WebElement> element = driver.findElements(By.className("post"));
 		WebElement element1 = element.get(0);
-		Assert.assertEquals("Mariam\npost test\nLikes: 0\nLike\nComment", element1.getText());
+		Assert.assertEquals("Mariam\npost test\nLikes: 0\nComment", element1.getText());
 	}
 
 	@Test
@@ -122,7 +122,7 @@ public class PostTest {
         post_element = driver.findElements(By.className("post"));
         element1 = post_element.get(0);
 
-		Assert.assertEquals("Mariam\npost test\nLikes: 1\nLike\nComment", element1.getText());
+		Assert.assertEquals("Mariam\npost test\nLikes: 1\nComment", element1.getText());
 		postRepository.deleteTestPost();
 	}
 

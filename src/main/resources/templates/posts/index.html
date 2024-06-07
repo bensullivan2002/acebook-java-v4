@@ -393,7 +393,7 @@
 	</script>
 
 	<div th:each="post : ${posts}" class="card post-card">
-		<div class="card-body">
+		<div class="card-body post">
 			<div class="post-header">
 				<span class="post-user-name profile-name" th:text="${post.user.firstname}"></span>
 				<img th:src="${post.user.profilePicture}" class="profile-pic" alt="profile-picture">
@@ -402,11 +402,11 @@
 				<p th:text="${post.content}"></p>
 				<!-- Conditionally display the image only if img_url is present -->
 				<div th:if="${post.img_url != null && !post.img_url.isEmpty()}">
-					<img th:src="${post.img_url}" class="img-fluid">
+					<img th:src="${post.img_url}" id="postImage" class="img-fluid">
 				</div>
 			</div>
 			<!-- Display comments associated with the post -->
-			<div class="comments mt-3">
+			<div class="comments mt-3 comment">
 				<div th:each="comment : ${post.comments}" class="card comment-card">
 					<div class="card-body">
 						<p th:text="${comment.content}"></p>
