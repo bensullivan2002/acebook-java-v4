@@ -196,10 +196,13 @@
         uploadSubmit.classList.remove('hidden');
         uploadWidget.classList.remove('hidden');
         profileUpload.classList.remove('hidden');
+        uploadWidget.classList.add('hidden');
+
+
     }
     function showImageField() {
         const imageView = document.getElementById('thumbnail-image');
-        const uploadWidget = document.getElementById('upload_widget');
+        const uploadWidget = document.getElementById('upload_post_widget');
         const imagePreview = document.getElementById('image-preview');
         var changeUpload = document.getElementById('change_upload');
         imageView.classList.remove('hidden');
@@ -251,23 +254,49 @@
       <div class="nav-item me-2">
         <a class="nav-link" href="/logout">Logout</a>
       </div>
-      <form class="d-flex align-items-center" role="search">
-        <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
-        <button class="btn btn-outline-success" type="submit">Search</button>
-      </form>
     </div>
   </div>
 </nav>
 <h1>User Profile</h1>
 
+<!-- Display Profile Picture -->
+
+
 <div class="container">
   <!-- User Profile Picture -->
   <div class="user-container">
-    <img class="user-profile-pic" th:src="${user.profilePicture}" alt="Profile Picture">
+    <img id="profile-thumbnail-image"/>
+    <form action="#" th:action="@{/profile-pic-add}" th:object="${user}" method="post">
+      <input type="hidden" id="imageProfileInfoInput" name="imageProfileInfoInput" th:value="*{profilePicture}"/>
+      <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+      <p class="hidden" th:id="profile-upload">
+        <button type="submit" id="upload_submit" >Confirm profile picture</button>
+      </p>
+      <button type="button" id="upload_widget" th:onclick="'showUploadSubmit()'" >Upload Profile Picture</button>
+    </form>
+
+    <script src="https://upload-widget.cloudinary.com/latest/global/all.js" type="text/javascript"></script>
+    <script type="text/javascript">
+      const myWidget = cloudinary.createUploadWidget({
+                  cloudName: 'dk3vxa56n',
+                  uploadPreset: 'test_preset'
+              }, (error, result) => {
+                  if (!error && result && result.event === "success") {
+                      console.log('Done! Here is the image info: ', result.info);
+                      document.getElementById("imageProfileInfoInput").value = JSON.stringify(result.info);
+                      document.getElementById("profile-thumbnail-image").src = result.info.thumbnail_url;
+                  }
+              }
+      );
+      document.getElementById("upload_widget").addEventListener("click", function(){
+      myWidget.open();
+    }, false);
+    </script>
   </div>
 
   <!-- User Information -->
   <div class="user-container">
+    <img class="user-profile-pic" th:src="${user.profilePicture}" alt="Profile Picture">
     <p>Username: <span th:text="${user.username}">Username</span></p>
     <p>First Name: <span th:text="${user.firstname}">First Name</span></p>
     <p>Last Name: <span th:text="${user.lastname}">Last Name</span></p>
@@ -291,13 +320,13 @@
       <img th:src="thumbnail_image" id="thumbnail-image"/>
       <button class="btn btn-outline-secondary" type="button" id="change_upload">Change Media</button>
     </p>
-    <button class="btn btn-outline-secondary" type="button" id="upload_widget" th:onclick="'showImageField()'">Upload Media</button>
+    <button class="btn btn-outline-secondary" type="button" id="upload_post_widget" th:onclick="'showImageField()'">Upload Media</button>
   </form>
 
   <script src="https://upload-widget.cloudinary.com/latest/global/all.js" type="text/javascript"></script>
 
   <script type="text/javascript">
-    var myWidget = cloudinary.createUploadWidget({
+    var myWidget2 = cloudinary.createUploadWidget({
         cloudName: 'dk3vxa56n',
         uploadPreset: 'test_preset'}, (error, result) => {
         if (!error && result && result.event === "success") {
@@ -307,11 +336,11 @@
         }
     })
 
-    document.getElementById("upload_widget").addEventListener("click", function(){
-        myWidget.open();
+    document.getElementById("upload_post_widget").addEventListener("click", function(){
+        myWidget2.open();
     }, false);
     document.getElementById("change_upload").addEventListener("click", function(){
-        myWidget.open();
+        myWidget2.open();
     }, false);
 
   </script>

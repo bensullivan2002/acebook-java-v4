@@ -338,10 +338,6 @@
             <div class="nav-item me-2">
                 <a class="nav-link" href="/logout">Logout</a>
             </div>
-            <form class="d-flex align-items-center" role="search">
-                <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
-                <button class="btn btn-outline-success" type="submit">Search</button>
-            </form>
         </div>
     </div>
 </nav>
@@ -383,7 +379,7 @@
             if (!error && result && result.event === "success") {
                 console.log('Done! Here is the image info: ', result.info);
                 document.getElementById("imageInfoInput").value = JSON.stringify(result.info);
-                document.getElementById("thumbnail-image").src = result.info.thumbnail_url;
+                document.getElementById("thumbnail-image").src = result.info.url;
             }
         })
 

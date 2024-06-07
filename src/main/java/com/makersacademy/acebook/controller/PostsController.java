@@ -52,6 +52,11 @@ public class PostsController {
         commentRepository.save(comment);
     }
 
+    @GetMapping("/welcome")
+    public String welcome(Model model) {
+        return "posts/landing-page";
+    }
+
     @GetMapping("/posts")
     public String index(Model model) {
         Iterable<Post> posts = postRepository.findAllByOrderByIdDesc();
@@ -70,8 +75,8 @@ public class PostsController {
         if (imageInfo != "") {
             ObjectMapper mapper = new ObjectMapper();
             Map<String, String> map = mapper.readValue(imageInfo, Map.class);
-            String thumbnail_url = map.get("thumbnail_url");
-            post.setImg_url(thumbnail_url);
+            String url = map.get("url");
+            post.setImg_url(url);
         }
         postRepository.save(post);
         if ("true".equals(fromProfilePage)) {
