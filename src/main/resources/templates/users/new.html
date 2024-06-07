@@ -1,97 +1,273 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
-<html lang="en">
-<head>
+<html xmlns:th="http://www.thymeleaf.org"
+	  xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+<head lang="en">
 	<meta charset="UTF-8">
 	<title>Signup</title>
+	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
 	<style>
-		.hidden {
-			display: none;
-		}
+		/* General styles */
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f2f5;
+            margin: 0;
+            padding: 0;
+        }
+
+        h1 {
+            text-align: center;
+            color: #4267b2;
+            margin: 20px 0;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: 40px auto;
+            padding: 20px;
+            background-color: white;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+        }
+
+        form p {
+            margin: 10px 0;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        input[type="text"], input[type="password"], input[type="submit"], button {
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            width: 100%;
+        }
+
+        input[type="submit"], button {
+            background-color: #4267b2;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+
+        input[type="submit"]:hover, button:hover {
+            background-color: #365899;
+        }
+
+        input[type="reset"] {
+            background-color: #6c757d;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+
+        input[type="reset"]:hover {
+            background-color: #5a6268;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        .nav-bar {
+            margin-bottom: 20px;
+        }
+
+        .navbar {
+            background-color: #ffc107; /* Navbar color */
+        }
+
+        .navbar-brand {
+            color: #343a40; /* Brand text color */
+        }
+
+        .nav-link {
+            color: #343a40; /* Navbar link color */
+        }
+
+        .nav-link:hover {
+            color: #212529; /* Navbar link hover color */
+        }
+
+        .btn-outline-success {
+            color: #28a745; /* Button text color */
+            border-color: #28a745; /* Button border color */
+        }
+
+        .btn-outline-success:hover {
+            color: #fff; /* Button hover text color */
+            background-color: #28a745; /* Button hover background color */
+            border-color: #28a745; /* Button hover border color */
+        }
+
+        .signed-in-user {
+            float: right;
+        }
+
+        #thumbnail-image {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            display: block;
+            margin: 10px auto;
+        }
+
+        #upload_widget, #change_upload {
+            margin: 10px auto;
+            background-color: #4267b2;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        #upload_widget:hover, #change_upload:hover {
+            background-color: #365899;
+        }
+
+        input[type="submit"], input[type="reset"], #upload_widget, #change_upload {
+            width: auto;
+        }
 	</style>
 	<script>
-		function showImageField(){
-			var imageView = document.getElementById('thumbnail-image');
-			var uploadWidget = document.getElementById('upload_widget');
-			var imagePreview = document.getElementById('image-preview');
-			imageView.classList.remove('hidden');
-			uploadWidget.classList.remove('hidden');
-			imagePreview.classList.remove('hidden');
-		}
+		function showImageField() {
+            const imageView = document.getElementById('thumbnail-image');
+            const uploadWidget = document.getElementById('upload_widget');
+            const imagePreview = document.getElementById('image-preview');
+            const changeUpload = document.getElementById('change_upload');
+            imageView.classList.remove('hidden');
+            changeUpload.classList.remove('hidden');
+            imagePreview.classList.remove('hidden');
+            uploadWidget.classList.add('hidden');
+        }
+
+        document.addEventListener("DOMContentLoaded", function () {
+            const urlParams = new URLSearchParams(window.location.search);
+            if (urlParams.has('error')) {
+                const error = urlParams.get('error');
+                switch (error) {
+                    case 'username':
+                        alert("Username already exists.");
+                        break;
+                    case 'emailExists':
+                        alert("Email already exists.");
+                        break;
+                    case 'email':
+                        alert("Invalid email address.");
+                        break;
+                    case 'password':
+                        alert("Passwords do not match or are invalid.");
+                        break;
+                    default:
+                        alert("Unknown error occurred.");
+                        break;
+                }
+            }
+        });
 	</script>
 </head>
 <body>
-<script>
-	document.addEventListener("DOMContentLoaded", function() {
-		const urlParams = new URLSearchParams(window.location.search);
-		if (urlParams.has('error')) {
-			const error = urlParams.get('error');
-			switch (error) {
-				case 'username':
-					alert("Username already exists.");
-					break;
-				case 'emailExists':
-					alert("Email already exists.");
-					break;
-				case 'email':
-					alert("Invalid email address.");
-					break;
-				case 'password':
-					alert("Passwords do not match or are invalid.");
-					break;
-				default:
-					alert("Unknown error occurred.");
-					break;
-			}
-		}
-	});
-</script>
+<nav class="nav-bar navbar navbar-expand-lg bg-body-tertiary">
+	<div class="container-fluid">
+		<a class="navbar-brand" href="/posts">Acebook</a>
+		<button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
+				aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+			<span class="navbar-toggler-icon"></span>
+		</button>
+		<div class="collapse navbar-collapse" id="navbarSupportedContent">
+			<ul class="navbar-nav me-auto mb-2 mb-lg-0">
+				<li class="nav-item">
+					<a class="nav-link" aria-current="page" href="/users">Users</a>
+				</li>
+				<li class="nav-item">
+					<a class="nav-link" href="/users/my-profile">My Profile</a>
+				</li>
+			</ul>
+			<div class="nav-item me-2">
+				<a class="nav-link" href="/logout">Logout</a>
+			</div>
+			<form class="d-flex align-items-center" role="search">
+				<input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
+				<button class="btn btn-outline-success" type="submit">Search</button>
+			</form>
+		</div>
+	</div>
+</nav>
+<div class="container">
+	<h1 class="text-center mb-4">Signup</h1>
+	<form action="#" th:action="@{/users}" th:object="${user}" method="post">
+		<div class="input-group mb-3">
+			<span class="input-group-text" id="basic-addon1">Username:</span>
+			<input type="text" class="form-control" th:field="*{username}" placeholder="Enter Username..."
+				   aria-label="Username" aria-describedby="basic-addon1">
+		</div>
+		<div class="input-group mb-3">
+			<span class="input-group-text" id="basic-addon2">First Name:</span>
+			<input type="text" class="form-control" th:field="*{firstname}" placeholder="Enter First Name..." aria-label="First Name" aria-describedby="basic-addon2">
+		</div>
+		<div class="input-group mb-3">
+			<span class="input-group-text" id="basic-addon3">Last Name:</span>
+			<input type="text" class="form-control" th:field="*{lastname}" placeholder="Enter Last Name..."
+				   aria-label="Last Name" aria-describedby="basic-addon3">
+		</div>
+		<div class="input-group mb-3">
+			<span class="input-group-text" id="basic-addon4">Email:</span>
+			<input type="text" class="form-control" th:field="*{email}" placeholder="Enter Email..." aria-label="Email"
+				   aria-describedby="basic-addon1">
+		</div>
+		<div class="input-group mb-3">
+			<span class="input-group-text" id="basic-addon5">Bio:</span>
+			<input type="text" class="form-control" th:field="*{bio}" placeholder="Enter Bio..." aria-label="Bio"
+				   aria-describedby="basic-addon1">
+		</div>
+		<div class="input-group mb-3">
+			<span class="input-group-text" id="basic-addon6">Password:</span>
+			<input type="password" class="form-control" th:field="*{password}" placeholder="Enter Password..."
+				   aria-label="Password" aria-describedby="basic-addon1">
+		</div>
+		<div class="input-group mb-3">
+			<span class="input-group-text" id="basic-addon7">Confirm Password:</span>
+			<input type="password" class="form-control" id="confirm_password" name="confirm_password"
+				   placeholder="Confirm Password..." aria-label="Confirm Password" aria-describedby="basic-addon1">
+		</div>
+		<input type="hidden" id="profilePic" name="profilePic" th:field="*{profilePicture}"/>
+		<div class="buttons-container">
+			<button class="btn btn-outline-secondary" type="button" id="upload_widget" th:onclick="'showImageField()'">Upload Media</button>
+		</div>
+		<p class="hidden" id="image-preview">
+			<img th:src="thumbnail_image" id="thumbnail-image"/>
+			<button class="btn btn-outline-secondary" type="button" id="change_upload">Change Media</button>
+		</p>
 
-<header>
-	<div sec:authorize="isAuthenticated()">
-		<a href="/logout">Logout</a>
-	</div>
-	<div sec:authorize="isAnonymous()">
-		<a href="/login">Login</a>
-	</div>
-</header>
-<form action="#" th:action="@{/users}" th:object="${user}" method="post">
-    <p>Username: <input type="text" th:field="*{username}" /></p>
-	<p>First Name: <input type="text" th:field="*{firstname}" /></p>
-	<p>Last Name: <input type="text" th:field="*{lastname}" /></p>
-	<p>Email: <input type="text" th:field="*{email}" /></p>
-	<p>Bio: <input type="text" th:field="*{bio}" /></p>
-    <p>Password: <input type="password" th:field="*{password}" /></p>
-	<p>Confirm Password: <input type="password" id="confirm_password" name="confirm_password" /></p>
-	<input type="hidden" id="profilePic" name="profilePic" th:field="*{profilePicture}"/>
-	<p class="hidden" id="image-preview">
-		<img th:src="thumbnail_image" id="thumbnail-image"/>
-	</p>
-	<button type="button" id="upload_widget" th:onclick="'showImageField()'">Upload Media</button>
-	<p><input type="submit" value="Submit" id="submit"/> <input type="reset" value="Reset" /></p>
-</form>
+		<p><input type="submit" value="Submit" id="submit"/> <input id="reset" type="reset" value="Reset"/></p>
+	</form>
+</div>
 
 <script src="https://upload-widget.cloudinary.com/latest/global/all.js" type="text/javascript"></script>
 
 <script type="text/javascript">
-
 	const myWidget = cloudinary.createUploadWidget({
-				cloudName: 'dk3vxa56n',
-				uploadPreset: 'test_preset'
-			}, (error, result) => {
-				if (!error && result && result.event === "success") {
-					console.log('Done! Here is the image info: ', result.info);
-					document.getElementById("profilePic").value = result.info.thumbnail_url;
-					document.getElementById("thumbnail-image").src = result.info.thumbnail_url;
+                cloudName: 'dk3vxa56n',
+                uploadPreset: 'test_preset'
+            }, (error, result) => {
+                if (!error && result && result.event === "success") {
+                    console.log('Done! Here is the image info: ', result.info);
+                    document.getElementById("profilePic").value = result.info.thumbnail_url;
+                    document.getElementById("thumbnail-image").src = result.info.thumbnail_url;
 
-				}
-			}
-	);
+                }
+            }
+    );
 
-	document.getElementById("upload_widget").addEventListener("click", function(){
-		myWidget.open();
-	}, false);
+    document.getElementById("upload_widget").addEventListener("click", function () {
+        myWidget.open();
+    }, false);
+    document.getElementById("change_upload").addEventListener("click", function () {
+        myWidget.open();
+    }, false);
 
 </script>
 </body>
 </html>
+
