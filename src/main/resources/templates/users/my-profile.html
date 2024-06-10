@@ -238,7 +238,10 @@
 <body>
 <nav class="nav-bar navbar navbar-expand-lg bg-body-tertiary">
   <div class="container-fluid">
-    <a class="navbar-brand" href="/posts">Acebook</a>
+    <a class="navbar-brand" href="/posts">
+      <img src="/logo.png" alt="" width="30" height="24" class="d-inline-block align-text-top">
+      Acebook
+    </a>
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
@@ -297,10 +300,10 @@
   <!-- User Information -->
   <div class="user-container">
     <img class="user-profile-pic" th:src="${user.profilePicture}" alt="Profile Picture">
-    <p>Username: <span th:text="${user.username}">Username</span></p>
-    <p>First Name: <span th:text="${user.firstname}">First Name</span></p>
-    <p>Last Name: <span th:text="${user.lastname}">Last Name</span></p>
-    <p>Bio: <span th:text="${user.bio}">User Bio</span></p>
+    <p>Username: <span id="username" th:text="${user.username}">Username</span></p>
+    <p>First Name: <span id="firstname" th:text="${user.firstname}">First Name</span></p>
+    <p>Last Name: <span id="lastname" th:text="${user.lastname}">Last Name</span></p>
+    <p>Bio: <span id="bio" th:text="${user.bio}">User Bio</span></p>
   </div>
 </div>
 
@@ -311,8 +314,8 @@
     <div class="input-group mb-3">
       <textarea type="text" class="form-control" placeholder="Write a post..." aria-label="Post Content" aria-describedby="button-addon2" th:field="*{content}" id="content"></textarea>
       <span class="input-group-text p-0">
-                <button class="btn btn-outline-secondary h-100" type="submit" id="content_create" value="submit">Submit</button>
-            </span>
+        <button class="btn btn-outline-secondary h-100" type="submit" id="content_create" value="submit">Submit</button>
+      </span>
     </div>
     <input type="hidden" id="imageInfoInput" name="imageInfoInput" th:value="*{img_url}"/>
     <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
@@ -352,7 +355,7 @@
         <img th:src="${post.user.profilePicture}" class="profile-pic" alt="profile-picture">
       </div>
       <div class="post-body">
-        <p th:text="${post.content}"></p>
+        <p id="post-content" th:text="${post.content}"></p>
         <!-- Conditionally display the image only if img_url is present -->
         <div th:if="${post.img_url != null && !post.img_url.isEmpty()}">
           <img th:src="${post.img_url}" class="img-fluid">

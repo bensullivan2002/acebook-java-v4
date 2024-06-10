@@ -69,6 +69,7 @@ public class ProfilePageTest {
         driver.findElement(By.id("username")).sendKeys("testing");
         driver.findElement(By.id("password")).sendKeys("Password123!");
         driver.findElement(By.tagName("button")).click();
+        driver.get("http://localhost:" +port+ "/users/my-profile");
     }
 
     @Test
@@ -139,7 +140,7 @@ public class ProfilePageTest {
         Long id = find.getId();
 
 //		Finding the like button for the test post and clicking
-        WebElement like_element = driver.findElement(By.id(String.format("like_button%s", id)));
+        WebElement like_element = driver.findElement(By.id(String.format("like_button%d", id)));
         like_element.click();
 
         List<WebElement> post_element = driver.findElements(By.className("post"));
@@ -154,7 +155,7 @@ public class ProfilePageTest {
         post_element = driver.findElements(By.className("post"));
         element1 = post_element.get(0);
 
-        Assert.assertEquals("This is a testing post!\nLikes: 1\nLike\nComment", element1.getText());
+        Assert.assertEquals("Mariam\nThis is a testing post!\nLikes: 1\nComment", element1.getText());
         postRepository.deleteTestPost();
     }
 

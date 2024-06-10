@@ -56,7 +56,7 @@ public class UsersController {
         return "users/new";
     }
 
-    @PostMapping("/users")
+    @PostMapping("/users/new")
     public RedirectView signup(@ModelAttribute User user, @RequestParam("confirm_password") String confirmPassword) {
         if (userRepository.findByUsername(user.getUsername()) != null) {
             return new RedirectView("/users/new?error=username");
