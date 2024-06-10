@@ -98,7 +98,7 @@ public class PostTest {
 		WebElement element1 = element.get(0);
 		Assert.assertEquals("Mariam\npost test\nLikes: 0\nComment", element1.getText());
 	}
-
+	//
 	@Test
 	public void signInLikeTestPost() {
 		login();
