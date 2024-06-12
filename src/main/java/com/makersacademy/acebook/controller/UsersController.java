@@ -15,8 +15,6 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -27,7 +25,6 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
-import java.util.Optional;
 
 import static com.makersacademy.acebook.utils.EmailValidator.isEmailValid;
 import static com.makersacademy.acebook.utils.PasswordValidator.isPasswordValid;
@@ -38,7 +35,6 @@ public class UsersController {
     private final UserRepository userRepository;
     private final AuthoritiesRepository authoritiesRepository;
     private final PostRepository postRepository;
-    private final CommentRepository commentRepository;
     private PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
     @Autowired
@@ -47,7 +43,6 @@ public class UsersController {
         this.userRepository = userRepository;
         this.authoritiesRepository = authoritiesRepository;
         this.postRepository = postRepository;
-        this.commentRepository = commentRepository;
     }
 
     @GetMapping("/users/new")
